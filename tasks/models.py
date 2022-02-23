@@ -1,10 +1,8 @@
-from django.db import models
-
 # Create your models here.
-class Task(models.Model):
-    title = models.CharField(max_length=200)
-    complete = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
+class Task(dict):
+    def __init__(self, title):
+        self.title = title
+        self.complete = False
+        super().__init__(title=self.title, complete=self.complete)
+
