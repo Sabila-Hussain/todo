@@ -2,25 +2,22 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 # Create your views here.
 from .models import *
-from .forms import *
 from .apps import FirestoreDB
 import json
 
 def index(request):
-    tasks = FirestoreDB.todo_collection.get()
-    taskdict = [task.to_dict() for task in tasks]
-    form = TaskForm()
-    context = {'tasks': taskdict,  'form': form}
-
 
     if request.method == "POST":
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            FirestoreDB.todo_collection.document(data["title"]).set(data)
-            # form.save()
-            return redirect('/')
-    return render(request, 'tasks/list.html', context)
+        # extract data from the post request
+        data = request.POST
+        title = data["title"]
+
+        # create Task object and save it in Firestore
+        task = Task(title)
+        FirestoreDB.todo_collection.document(title).set(task)
+        return redirect('/')
+
+    return render(request, 'tasks/list.html', {})
 
 
 def updateTask(request, pk):
