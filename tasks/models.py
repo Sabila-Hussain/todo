@@ -1,9 +1,8 @@
 # Create your models here.
 
 class Task(dict):
-    def __init__(self, title, complete, created):
+    def __init__(self, title):
         self.title = title
-        self.complete = complete
-        self.created = created
-        super().__init__(title=title, complete=complete, created=created)
+        self.complete = False
+        super().__init__(title=self.title, complete=self.complete)
 
